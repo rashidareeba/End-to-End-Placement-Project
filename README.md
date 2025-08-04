@@ -1,5 +1,3 @@
-# End-to-End-Placement-Project
-![download](https://github.com/user-attachments/assets/8d5b9708-1d1a-4f6e-a950-915a4ef779b7)
 
 # 🎯 End-to-End Placement Prediction ML Project
 
