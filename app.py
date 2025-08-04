@@ -2,39 +2,34 @@ import streamlit as st
 import numpy as np
 import joblib
 
-# Load the trained Logistic Regression model
-model = joblib.load("model.pkl")  # Make sure model.pkl is in the same directory
+# Load model
+model = joblib.load("model.pkl")
 
-# Set Streamlit page config
+# Streamlit page settings
 st.set_page_config(page_title="Placement Predictor", page_icon="🎓", layout="centered")
 
-# App Title
-st.title("🎯 Placement Prediction System")
-st.markdown(
-    """
-    Welcome to the **Placement Predictor App**!  
-    Enter your academic details below to check whether you're likely to get placed based on a trained ML model.
-    """
-)
+# Title and description
+st.title("🎯 Placement Prediction App")
+st.markdown("""
+Welcome to the **Placement Predictor**!  
+Enter your details below to see if you're likely to get placed.
+""")
 
-# User Inputs
-st.subheader("📥 Enter Details:")
+# Input form
+with st.form("placement_form"):
+    cgpa = st.slider("📘 CGPA", min_value=0.0, max_value=10.0, value=7.0, step=0.1)
+    iq = st.slider("🧠 IQ Score", min_value=50, max_value=150, value=100, step=1)
 
-col1, col2 = st.columns(2)
+    submit = st.form_submit_button("🔍 Predict Placement")
 
-with col1:
-    iq = st.number_input("🧠 IQ Score", min_value=50, max_value=200, value=100, step=1)
-
-with col2:
-    cgpa = st.number_input("📘 CGPA", min_value=0.0, max_value=10.0, value=8.0, step=0.1)
-
-# Prediction button
-if st.button("📊 Predict Placement"):
-    features = np.array([[iq, cgpa]])
-    prediction = model.predict(features)[0]
-    probability = model.predict_proba(features)[0][prediction]
-
+# Prediction logic
+if submit:
+    input_data = np.array([[cgpa, iq]])
+    prediction = model.predict(input_data)[0]
+    
     if prediction == 1:
-        st.success(f"🎓 Congratulations! The model predicts you will be **PLACED** ✅\n\nConfidence: {probability:.2%}")
+        st.success("🎉 Congratulations! You are likely to be **Placed**.")
     else:
-        st.error(f"❌ Sorry! The model predicts you will **NOT be placed**\n\nConfidence: {probability:.2%}")
+        st.error("📌 Sorry, you are likely **Not to be Placed**. Work on improving skills!")
+
+
